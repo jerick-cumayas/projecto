@@ -13,8 +13,7 @@ namespace Projecto.Data.Service
 
     public async Task<IEnumerable<Ticket>> GetAll()
     {
-      var tickets = await _context.Tickets.ToListAsync();
-      return tickets;
+      return await _context.Tickets.ToListAsync();
     }
 
     public async Task<Ticket?> GetById(int id)
@@ -22,7 +21,12 @@ namespace Projecto.Data.Service
       var ticket = await _context.Tickets.FirstOrDefaultAsync(p => p.Id == id);
       return ticket;
     }
-
+    public async Task<IEnumerable<Ticket>> GetTicketsByProjectId(int projectId)
+    {
+      return await _context.Tickets
+          .Where(t => t.ProjectId == projectId)
+          .ToListAsync();
+    }
     public async Task Add(Ticket ticket)
     {
       _context.Tickets.Add(ticket);
