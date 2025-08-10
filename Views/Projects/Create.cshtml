@@ -1,0 +1,17 @@
+﻿@model Projecto.Models.Project
+
+<div class="container">
+   <h2>Add Project</h2>
+   <form asp-action="Create" method="post">
+       <div>
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+       </div>
+       <div>
+            <label asp-for="Description" class="form-label"></label>
+            <input asp-for="Description" class="form-control" />
+       </div>
+       <button type="submit" class="btn btn-primary">Add Project</button>
+       <button asp-action="Index" class="btn btn-secondary">Cancel</button>
+   </form>
+</div>

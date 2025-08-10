@@ -1,0 +1,38 @@
+@model IEnumerable<Projecto.Models.Ticket>
+
+@{
+  ViewData["Title"] = "Tickets Page";
+}
+
+<div class="container d-flex justify-content-between align-items-center">
+  <h2>Tickets</h2>
+  <a asp-action="Create" class="btn btn-primary">+ Add Ticket</a>
+</div>
+
+<div class="container">
+  <table class="table table-bordered">
+    <thead class="table-light">
+      <tr>
+        <th>Title</th>
+        <th>Project</th>
+        <th>Priority</th>
+        <th>Status</th>
+        <th>CreatedAt</th>
+        <th>DueDate</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var project in Model)
+      {
+        <tr>
+          <td>@project.Title</td>
+          <td>@project.Project.Name</td>
+          <td>@project.Priority</td>
+          <td>@project.Status</td>
+          <td>@project.CreatedAt</td>
+          <td>@project.DueDate</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
