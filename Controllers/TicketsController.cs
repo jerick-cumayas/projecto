@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Projecto.Data.Service;
@@ -29,45 +30,46 @@ namespace Projecto.Controllers
       return View(ticket);
     }
 
-    public async Task<IActionResult> Create()
+    public IActionResult Create(int projectId)
     {
-      var projects = await _projectService.GetAll();
-      var vm = new TicketCreateViewModel
+      var model = new TicketFormModel
       {
-        Projects = projects.Select(p => new SelectListItem
-        {
-          Value = p.Id.ToString(),
-          Text = p.Name
-        }),
-        StatusOptions = Enum.GetValues(typeof(Models.TaskStatus))
-                            .Cast<Models.TaskStatus>()
-                            .Select(s => new SelectListItem
-                            {
-                                Value = ((int)s).ToString(),
-                                Text = s.ToString()
-                            }),
-
-        PriorityOptions = Enum.GetValues(typeof(Priority))
-                              .Cast<Priority>()
-                              .Select(p => new SelectListItem
-                              {
-                                  Value = ((int)p).ToString(),
-                                  Text = p.ToString()
-                              })
+        ProjectId = projectId,
+        DueDate = DateTime.Today.AddDays(7),
+        StatusOptions = EnumHelper.GetEnumSelectList<Models.TaskStatus>(),
+        PriorityOptions = EnumHelper.GetEnumSelectList<Priority>(),
       };
-      return View(vm);
+      return View(model);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Ticket ticket)
+    public async Task<IActionResult> Create(TicketFormModel form)
     {
-      if (ModelState.IsValid)
+      if (!ModelState.IsValid)
       {
-        await _ticketService.Add(ticket);
-        return RedirectToAction("Index");
+        var vm = new TicketFormModel
+        {
+          ProjectId = form.ProjectId,
+          DueDate = DateTime.Today.AddDays(7),
+          StatusOptions = EnumHelper.GetEnumSelectList<Models.TaskStatus>(),
+          PriorityOptions = EnumHelper.GetEnumSelectList<Priority>(),
+        };
+        return View("Create", vm);
       }
-      return RedirectToAction("Index");
+
+      var ticket = new Ticket
+      {
+        ProjectId = form.ProjectId,
+        Title = form.Title,
+        Description = form.Description,
+        Status = form.Status,
+        Priority = form.Priority,
+        DueDate = form.DueDate,
+      };
+
+      await _ticketService.Add(ticket);
+      return RedirectToAction("Details", "Projects", new { id = form.ProjectId });
     }
 
     public async Task<IActionResult> Edit(int id)
