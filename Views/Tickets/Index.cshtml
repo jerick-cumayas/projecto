@@ -22,15 +22,15 @@
       </tr>
     </thead>
     <tbody>
-      @foreach (var project in Model)
+      @foreach (var ticket in Model)
       {
         <tr>
-          <td>@project.Title</td>
-          <td>@project.Project.Name</td>
-          <td>@project.Priority</td>
-          <td>@project.Status</td>
-          <td>@project.CreatedAt</td>
-          <td>@project.DueDate</td>
+          <td>@ticket.Title</td>
+          <td>@ticket.Project!.Name</td>
+          <td>@ticket.Priority</td>
+          <td>@ticket.Status</td>
+          <td>@ticket.CreatedAt</td>
+          <td>@ticket.DueDate</td>
         </tr>
       }
     </tbody>

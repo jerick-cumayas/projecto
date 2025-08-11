@@ -6,8 +6,8 @@
     <p>@Model.Project.Description</p>
   </div>
   <div>
-    <button class="btn btn-secondary">Edit</button>
-    <button class="btn btn-danger">Delete</button>
+    <a asp-controller="Projects" asp-action="Edit" asp-route-id="@Model.Project.Id" class="btn btn-secondary">Edit</a>
+    <a asp-controller="Projects" asp-action="Delete" asp-route-id="@Model.Project.Id" class="btn btn-danger">Delete</a>
   </div>
 </div>
 
