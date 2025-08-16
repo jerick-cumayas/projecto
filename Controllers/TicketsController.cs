@@ -1,8 +1,6 @@
 using System.Runtime.InteropServices;
 using AspNetCoreGeneratedDocument;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Projecto.Data.Service;
 using Projecto.Models;
 using Projecto.Models.ViewModels;
@@ -12,12 +10,9 @@ namespace Projecto.Controllers
   public class TicketsController : Controller
   {
     private readonly ITicketService _ticketService;
-    private readonly IProjectService _projectService;
-
-    public TicketsController(ITicketService ticketService, IProjectService projectService)
+    public TicketsController(ITicketService ticketService)
     {
       _ticketService = ticketService;
-      _projectService = projectService;
     }
 
     public async Task<IActionResult> Index()
@@ -85,42 +80,85 @@ namespace Projecto.Controllers
     public async Task<IActionResult> Edit(int id)
     {
       var ticket = await _ticketService.GetById(id);
+      if (ticket == null) return NotFound();
+
       var vm = new TicketUpdateFormModel
       {
-        Ticket = ticket!,
+        Id = ticket.Id,
+        ProjectId = ticket.ProjectId,
+        Title = ticket.Title,
+        Description = ticket.Description,
+        Status = ticket.Status,
+        Priority = ticket.Priority,
+        CreatedAt = ticket.CreatedAt,
+        DueDate = ticket.DueDate,
         StatusOptions = EnumHelper.GetEnumSelectList<Models.TaskStatus>(),
-        PriorityOptions = EnumHelper.GetEnumSelectList<Priority>(),
+        PriorityOptions = EnumHelper.GetEnumSelectList<Priority>()
       };
       return View(vm);
     }
 
+    // POST: Tickets/Edit
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(TicketUpdateFormModel form)
     {
-      if (form == null)
-      {
-        return NotFound();
-      }
-      var ticket = await _ticketService.GetById(form.Ticket.Id);
-      if (ticket == null) return NotFound();
-
       if (!ModelState.IsValid)
       {
-        var vm = new TicketUpdateFormModel
+        // Print all errors to console (or logs)
+        foreach (var kvp in ModelState)
         {
-          Ticket = ticket,
-          StatusOptions = EnumHelper.GetEnumSelectList<Models.TaskStatus>(),
-          PriorityOptions = EnumHelper.GetEnumSelectList<Priority>(),
-        };
-        return View("Edit", vm);
+          var key = kvp.Key; // property name
+          var state = kvp.Value;
+          foreach (var error in state.Errors)
+          {
+            Console.WriteLine($"Key: {key}, Error: {error.ErrorMessage}");
+          }
+        }
+
+        // Or use Serilog/ILogger instead of Console.WriteLine
+        // _logger.LogWarning("Validation failed: {@ModelState}", ModelState);
+
+        Console.WriteLine(form.Id);
+        // Rebuild dropdowns so they don’t break in the view
+        form.StatusOptions = EnumHelper.GetEnumSelectList<Models.TaskStatus>();
+        form.PriorityOptions = EnumHelper.GetEnumSelectList<Priority>();
+
+        return View(form);
       }
 
-      ticket.Status = form.Ticket.Status;
-      ticket.Priority = form.Ticket.Priority;
+      var ticket = await _ticketService.GetById(form.Id);
+      if (ticket == null) return NotFound();
+
+      ticket.Status = form.Status;
+      ticket.Priority = form.Priority;
 
       await _ticketService.Update(ticket);
-      return RedirectToAction("Details", "Projects", new { id = form.Ticket.ProjectId });
+      return RedirectToAction("Details", "Projects", new { id = form.ProjectId });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateStatus(int id, Models.TaskStatus status)
+    {
+      var ticket = await _ticketService.GetById(id);
+      if (ticket == null) return NotFound();
+
+      ticket.Status = status;
+      await _ticketService.Update(ticket);
+
+      return RedirectToAction("Details", "Projects", new { id = ticket.ProjectId });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdatePriority(int id, Priority priority)
+    {
+      var ticket = await _ticketService.GetById(id);
+      if (ticket == null) return NotFound();
+
+      ticket.Priority = priority;
+      await _ticketService.Update(ticket);
+
+      return RedirectToAction("Details", "Projects", new { id = ticket.ProjectId });
     }
 
     public async Task<IActionResult> Delete(int id)

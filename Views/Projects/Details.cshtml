@@ -1,3 +1,4 @@
+@using Microsoft.EntityFrameworkCore.Infrastructure
 @model Projecto.Models.ViewModels.ProjectDetailsViewModel
 
 <div class="d-flex justify-content-between align-items-center">
@@ -41,8 +42,43 @@ else
       {
         <tr>
           <td>@ticket.Title</td>
-          <td>@ticket.Status</td>
-          <td>@ticket.Priority</td>
+          <td>
+            @* <form asp-action="UpdateStatus" asp-controller="Tickets" method="post">
+              <input type="hidden" name="Id" value="@ticket.Id" />
+              <select name="Status" class="form-control" onchange="this.form.submit()">
+                @foreach (var status in Enum.GetValues(typeof(Projecto.Models.TaskStatus)))
+                {
+                  <option value="@status" selected="@(status.Equals(ticket.Status))">
+                    @status
+                  </option>
+                }
+              </select>
+            </form> *@
+            @*  <form asp-action="UpdateStatus" asp-controller="Tickets" method="post">
+              <input type="hidden" name="Id" />
+              <select name="Status" asp-items="Model.StatusOptions" class="form-control"
+                onchange="this.form.submit()"></select>
+            </form> *@
+            <form asp-action="UpdateStatus" asp-controller="Tickets" method="post">
+              <input type="hidden" name="Id" value="@ticket.Id" />
+              <select name="Status" asp-for="@ticket.Status" asp-items="Model.StatusOptions" class="form-control"
+                onchange="this.form.submit()">
+              </select>
+            </form>
+          </td>
+          <td>
+            <form asp-action="UpdatePriority" asp-controller="Tickets" method="post">
+              <input type="hidden" name="Id" value="@ticket.Id" />
+              <select name="Priority" class="form-control" onchange="this.form.submit()">
+                @foreach (var priority in Enum.GetValues(typeof(Priority)))
+                {
+                  <option value="@priority" selected="@(priority.Equals(ticket.Priority))">
+                    @priority
+                  </option>
+                }
+              </select>
+            </form>
+          </td>
           <td>@ticket.DueDate.ToString("yyyy-MM-dd")</td>
           <td>
             <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-info">Details</a>

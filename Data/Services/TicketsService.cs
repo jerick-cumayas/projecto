@@ -35,7 +35,6 @@ namespace Projecto.Data.Service
 
     public async Task Update(Ticket ticket)
     {
-      _context.Tickets.Update(ticket);
       await _context.SaveChangesAsync();
     }
 
