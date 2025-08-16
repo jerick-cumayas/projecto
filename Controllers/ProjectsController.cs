@@ -39,6 +39,8 @@ namespace Projecto.Controllers
             {
                 Project = project,
                 Tickets = tickets,
+                StatusOptions = EnumHelper.GetEnumSelectList<Models.TaskStatus>(),
+                PriorityOptions = EnumHelper.GetEnumSelectList<Priority>(),
                 OpenTicketsCount = tickets.Count(t => t.Status == Models.TaskStatus.ToDo)
             };
 
