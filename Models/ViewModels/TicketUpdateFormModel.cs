@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-
 namespace Projecto.Models.ViewModels
 {
     public class TicketUpdateFormModel

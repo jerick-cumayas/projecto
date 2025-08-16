@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using AspNetCoreGeneratedDocument;
 using Microsoft.AspNetCore.Mvc;
 using Projecto.Data.Service;
 using Projecto.Models;
@@ -23,6 +24,13 @@ namespace Projecto.Controllers
     public async Task<IActionResult> Details(int id)
     {
       var ticket = await _ticketService.GetById(id);
+      // return View(ticket);
+      // var vm = new TicketUpdateFormModel
+      // {
+      //   Ticket = ticket!,
+      //   StatusOptions = EnumHelper.GetEnumSelectList<Models.TaskStatus>(),
+      //   PriorityOptions = EnumHelper.GetEnumSelectList<Priority>(),
+      // };
       return View(ticket);
     }
 
@@ -68,6 +76,7 @@ namespace Projecto.Controllers
       return RedirectToAction("Details", "Projects", new { id = form.ProjectId });
     }
 
+    [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
       var ticket = await _ticketService.GetById(id);
