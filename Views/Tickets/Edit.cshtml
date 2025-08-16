@@ -1,51 +1,9 @@
-@model Projecto.Models.ViewModels.TicketUpdateFormModel
+@model Projecto.Models.ViewModels.TicketFormModel
 
-<h2>@Model.Title</h2>
+@{
+  ViewData["Title"] = "Edit Ticket";
+  ViewData["FormAction"] = "Edit";
+  ViewData["SubmitText"] = "Save Changes";
+}
 
-<form asp-controller="Tickets" asp-action="Edit" method="post">
-  @Html.AntiForgeryToken()
-  <input type="hidden" asp-for="Id" />
-  <input type="hidden" asp-for="ProjectId" />
-  <p>Description: @Model.Description</p>
-  <div class="form-group">
-    <label asp-for="Status" class="form-label"></label>
-    <select id="statusDropdown" asp-for="Status" class="form-select" asp-items="Model.StatusOptions"
-      data-original-value="@Model.Status.ToString()"></select>
-    <span asp-validation-for="Status" class="text-danger"></span>
-  </div>
-  <div class="form-group">
-    <label asp-for="Priority" class="form-label"></label>
-    <select id="priorityDropdown" asp-for="Priority" class="form-select" asp-items="Model.PriorityOptions"
-      data-original-value="@Model.Priority.ToString()"></select>
-    <span asp-validation-for="Priority" class="text-danger"></span>
-  </div>
-  <p>Created At: @Model.CreatedAt</p>
-  <p>Due Date: @Model.DueDate</p>
-  <button id="saveBtn" class="btn btn-primary" type="submit" disabled>Save</button>
-  <a href="javascript:history.back()" class="btn btn-secondary">Go Back</a>
-</form>
-
-<script>
-  (function () {
-    const saveBtn = document.getElementById('saveBtn');
-    const statusDropdown = document.getElementById('statusDropdown');
-    const priorityDropdown = document.getElementById('priorityDropdown');
-
-    // Store original values on load
-    const originalStatus = statusDropdown.dataset.originalValue;
-    const originalPriority = priorityDropdown.dataset.originalValue;
-
-    // Function to check if changes were made
-    function checkChanges() {
-      if (statusDropdown.value !== originalStatus || priorityDropdown.value !== originalPriority) {
-        saveBtn.disabled = false;
-      } else {
-        saveBtn.disabled = true;
-      }
-    }
-
-    // Listen for changes on both dropdowns
-    statusDropdown.addEventListener('change', checkChanges);
-    priorityDropdown.addEventListener('change', checkChanges);
-  })();
-</script>
+@await Html.PartialAsync("_TicketForm", Model)

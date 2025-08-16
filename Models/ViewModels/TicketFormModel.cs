@@ -5,6 +5,7 @@ namespace Projecto.Models.ViewModels
 {
   public class TicketFormModel
   {
+    public int? Id { get; set; }
     [Required]
     public int ProjectId { get; set; }
 
@@ -23,6 +24,7 @@ namespace Projecto.Models.ViewModels
     [Required(ErrorMessage = "Due date is required")]
     [DataType(DataType.Date)]
     public DateTime DueDate { get; set; }
+    public DateTime? CreatedAt { get; set; }
 
     public IEnumerable<SelectListItem>? StatusOptions { get; set; }
     public IEnumerable<SelectListItem>? PriorityOptions { get; set; }

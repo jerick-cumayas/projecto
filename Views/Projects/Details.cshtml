@@ -14,7 +14,7 @@
 
 <p><strong>Open Tickets:</strong> @Model.OpenTicketsCount</p>
 
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex justify-content-between align-items-center mb-3">
   <h2>Tickets</h2>
   <a asp-controller="Tickets" asp-action="Create" asp-route-projectId="@Model.Project.Id" class="btn btn-primary">
     Add Ticket
@@ -31,6 +31,7 @@ else
     <thead>
       <tr>
         <th>Title</th>
+        <th>Description</th>
         <th>Status</th>
         <th>Priority</th>
         <th>Due Date</th>
@@ -42,26 +43,11 @@ else
       {
         <tr>
           <td>@ticket.Title</td>
+          <td>@ticket.Description</td>
           <td>
-            @* <form asp-action="UpdateStatus" asp-controller="Tickets" method="post">
-              <input type="hidden" name="Id" value="@ticket.Id" />
-              <select name="Status" class="form-control" onchange="this.form.submit()">
-                @foreach (var status in Enum.GetValues(typeof(Projecto.Models.TaskStatus)))
-                {
-                  <option value="@status" selected="@(status.Equals(ticket.Status))">
-                    @status
-                  </option>
-                }
-              </select>
-            </form> *@
-            @*  <form asp-action="UpdateStatus" asp-controller="Tickets" method="post">
-              <input type="hidden" name="Id" />
-              <select name="Status" asp-items="Model.StatusOptions" class="form-control"
-                onchange="this.form.submit()"></select>
-            </form> *@
             <form asp-action="UpdateStatus" asp-controller="Tickets" method="post">
               <input type="hidden" name="Id" value="@ticket.Id" />
-              <select name="Status" asp-for="@ticket.Status" asp-items="Model.StatusOptions" class="form-control"
+              <select name="Status" asp-for="@ticket.Status" asp-items="Model.StatusOptions" class="form-select"
                 onchange="this.form.submit()">
               </select>
             </form>
@@ -69,20 +55,17 @@ else
           <td>
             <form asp-action="UpdatePriority" asp-controller="Tickets" method="post">
               <input type="hidden" name="Id" value="@ticket.Id" />
-              <select name="Priority" class="form-control" onchange="this.form.submit()">
-                @foreach (var priority in Enum.GetValues(typeof(Priority)))
-                {
-                  <option value="@priority" selected="@(priority.Equals(ticket.Priority))">
-                    @priority
-                  </option>
-                }
+              <select name="Priority" asp-for="@ticket.Priority" asp-items="Model.PriorityOptions" class="form-select"
+                onchange="this.form.submit()">
               </select>
             </form>
           </td>
           <td>@ticket.DueDate.ToString("yyyy-MM-dd")</td>
           <td>
-            <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-info">Details</a>
-            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="btn btn-secondary">Edit</a>
+            <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-info"><i
+                class="bi bi-eye"></i></a>
+            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="btn btn-secondary"><i
+                class="bi bi-pencil"></i></a>
           </td>
         </tr>
       }

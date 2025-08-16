@@ -24,13 +24,6 @@ namespace Projecto.Controllers
     public async Task<IActionResult> Details(int id)
     {
       var ticket = await _ticketService.GetById(id);
-      // return View(ticket);
-      // var vm = new TicketUpdateFormModel
-      // {
-      //   Ticket = ticket!,
-      //   StatusOptions = EnumHelper.GetEnumSelectList<Models.TaskStatus>(),
-      //   PriorityOptions = EnumHelper.GetEnumSelectList<Priority>(),
-      // };
       return View(ticket);
     }
 
@@ -82,7 +75,7 @@ namespace Projecto.Controllers
       var ticket = await _ticketService.GetById(id);
       if (ticket == null) return NotFound();
 
-      var vm = new TicketUpdateFormModel
+      var vm = new TicketFormModel
       {
         Id = ticket.Id,
         ProjectId = ticket.ProjectId,
@@ -101,37 +94,16 @@ namespace Projecto.Controllers
     // POST: Tickets/Edit
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(TicketUpdateFormModel form)
+    public async Task<IActionResult> Edit(TicketFormModel form)
     {
-      if (!ModelState.IsValid)
-      {
-        // Print all errors to console (or logs)
-        foreach (var kvp in ModelState)
-        {
-          var key = kvp.Key; // property name
-          var state = kvp.Value;
-          foreach (var error in state.Errors)
-          {
-            Console.WriteLine($"Key: {key}, Error: {error.ErrorMessage}");
-          }
-        }
-
-        // Or use Serilog/ILogger instead of Console.WriteLine
-        // _logger.LogWarning("Validation failed: {@ModelState}", ModelState);
-
-        Console.WriteLine(form.Id);
-        // Rebuild dropdowns so they don’t break in the view
-        form.StatusOptions = EnumHelper.GetEnumSelectList<Models.TaskStatus>();
-        form.PriorityOptions = EnumHelper.GetEnumSelectList<Priority>();
-
-        return View(form);
-      }
-
-      var ticket = await _ticketService.GetById(form.Id);
+      var ticket = await _ticketService.GetById(form.Id!.Value);
       if (ticket == null) return NotFound();
 
+      ticket.Title = form.Title;
+      ticket.Description = form.Description;
       ticket.Status = form.Status;
       ticket.Priority = form.Priority;
+      ticket.DueDate = form.DueDate;
 
       await _ticketService.Update(ticket);
       return RedirectToAction("Details", "Projects", new { id = form.ProjectId });
