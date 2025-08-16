@@ -2,39 +2,10 @@
 
 @{
     ViewData["Title"] = "Create Ticket";
+    ViewData["FormAction"] = "Create";
+    ViewData["SubmitText"] = "Create";
 }
 
 <h2>Create Ticket</h2>
 
-<form asp-action="Create" method="post">
-    <input type="hidden" asp-for="ProjectId" />
-    <div class="form-group">
-        <label asp-for="Title"></label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Description"></label>
-        <input asp-for="Description" class="form-control" />
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Status" class="form-label"></label>
-        <select asp-for="Status" class="form-select" asp-items="Model.StatusOptions"></select>
-        <span asp-validation-for="Status" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Priority" class="form-label"></label>
-        <select asp-for="Priority" class="form-select" asp-items="Model.PriorityOptions"></select>
-        <span asp-validation-for="Priority" class="text-danger"></span>
-    </div>
-    <div class="form-group" mb-3>
-        <label asp-for="DueDate" class="form-label"></label>
-        <input asp-for="DueDate" type="date" class="form-control" />
-        <span asp-validation-for="DueDate" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Create</button>
-        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-    </div>
-</form>
+@await Html.PartialAsync("_TicketForm", Model)
