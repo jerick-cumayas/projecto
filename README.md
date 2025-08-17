@@ -16,7 +16,7 @@ Tickets
 - [x] View ticket details 
 - [x] Update ticket Status
 - [x] Update ticket Priority
-- [ ] Delete a ticket - `feature/11-delete-ticket`
+- [x] Delete a ticket - `feature/11-delete-ticket`
 
 Statistics
 - [ ] Show number of open tickets or tickets with To Do status in a project - `feature/12-stats-project-open`
