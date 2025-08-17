@@ -19,6 +19,7 @@
         <th>Status</th>
         <th>CreatedAt</th>
         <th>DueDate</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -31,6 +32,14 @@
           <td>@ticket.Status</td>
           <td>@ticket.CreatedAt</td>
           <td>@ticket.DueDate</td>
+          <td>
+            <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-info"><i
+                class="bi bi-eye"></i></a>
+            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="btn btn-secondary"><i
+                class="bi bi-pencil"></i></a>
+            <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id" class="btn btn-secondary"><i
+                class="bi bi-trash"></i></a>
+          </td>
         </tr>
       }
     </tbody>
