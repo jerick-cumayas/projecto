@@ -1,6 +1,5 @@
-using System.Runtime.InteropServices;
-using AspNetCoreGeneratedDocument;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Projecto.Data.Service;
 using Projecto.Models;
 using Projecto.Models.ViewModels;
@@ -10,9 +9,11 @@ namespace Projecto.Controllers
   public class TicketsController : Controller
   {
     private readonly ITicketService _ticketService;
-    public TicketsController(ITicketService ticketService)
+    private readonly IProjectService _projectService;
+    public TicketsController(ITicketService ticketService, IProjectService projectService)
     {
       _ticketService = ticketService;
+      _projectService = projectService;
     }
 
     public async Task<IActionResult> Index()
@@ -27,15 +28,26 @@ namespace Projecto.Controllers
       return View(ticket);
     }
 
-    public IActionResult Create(int projectId)
+    [HttpGet]
+    public async Task<IActionResult> Create(int? projectId)
     {
+      var projectOptions = await _projectService.GetAll();
+
       var model = new TicketFormModel
       {
-        ProjectId = projectId,
+        ProjectId = projectId ?? 0,
         DueDate = DateTime.Today.AddDays(7),
+        ProjectOptions = projectId.HasValue
+              ? null
+              : projectOptions.Select(p => new SelectListItem
+              {
+                Value = p.Id.ToString(),
+                Text = p.Name
+              }),
         StatusOptions = EnumHelper.GetEnumSelectList<Models.TaskStatus>(),
         PriorityOptions = EnumHelper.GetEnumSelectList<Priority>(),
       };
+
       return View(model);
     }
 
@@ -45,13 +57,12 @@ namespace Projecto.Controllers
     {
       if (!ModelState.IsValid)
       {
-        var vm = new TicketFormModel
-        {
-          ProjectId = form.ProjectId,
-          DueDate = DateTime.Today.AddDays(7),
-          StatusOptions = EnumHelper.GetEnumSelectList<Models.TaskStatus>(),
-          PriorityOptions = EnumHelper.GetEnumSelectList<Priority>(),
-        };
+        var vm = await BuildTicketFormModel(form.ProjectId);
+        vm.Title = form.Title;
+        vm.Description = form.Description;
+        vm.Status = form.Status;
+        vm.Priority = form.Priority;
+        vm.DueDate = form.DueDate;
         return View("Create", vm);
       }
 
@@ -148,6 +159,29 @@ namespace Projecto.Controllers
       if (ticket == null) return NotFound();
       await _ticketService.Delete(ticket);
       return RedirectToAction("Index");
+    }
+
+    private async Task<TicketFormModel> BuildTicketFormModel(int? projectId = null)
+    {
+      var model = new TicketFormModel
+      {
+        ProjectId = projectId ?? 0,
+        DueDate = DateTime.Today.AddDays(7),
+        StatusOptions = EnumHelper.GetEnumSelectList<Models.TaskStatus>(),
+        PriorityOptions = EnumHelper.GetEnumSelectList<Priority>()
+      };
+
+      if (!projectId.HasValue)
+      {
+        var projectOptions = await _projectService.GetAll();
+        model.ProjectOptions = projectOptions.Select(p => new SelectListItem
+        {
+          Value = p.Id.ToString(),
+          Text = p.Name
+        });
+      }
+
+      return model;
     }
   }
 }

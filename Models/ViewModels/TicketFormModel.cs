@@ -26,6 +26,7 @@ namespace Projecto.Models.ViewModels
     public DateTime DueDate { get; set; }
     public DateTime? CreatedAt { get; set; }
 
+    public IEnumerable<SelectListItem>? ProjectOptions { get; set; }
     public IEnumerable<SelectListItem>? StatusOptions { get; set; }
     public IEnumerable<SelectListItem>? PriorityOptions { get; set; }
   }
