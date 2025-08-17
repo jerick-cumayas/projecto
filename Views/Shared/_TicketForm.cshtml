@@ -1,22 +1,49 @@
-@model Projecto.Models.ViewModels.TicketFormModel 
+@model Projecto.Models.ViewModels.TicketFormModel
 
-<form asp-action="@ViewData["FormAction"]" method="post">
-    @if (Model.Id.HasValue){
-      <input type="hidden" asp-for="Id" />
+<form asp-controller="Tickets" asp-action="@ViewData["FormAction"]" method="post">
+    @*
+        Input required for updating/editing a ticket. Ticket Id is stored 
+        and used to retrieved the details of ticket from database.
+        TicketController.Edit(int id)
+    *@
+    @if (Model.Id.HasValue)
+    {
+        <input type="hidden" asp-for="Id" />
     }
-    <input type="hidden" asp-for="ProjectId" />
-    <div class="form-group"> 
+    <div class="form-group">
         <label asp-for="Title"></label>
         <input asp-for="Title" class="form-control" />
         <span asp-validation-for="Title" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="Description"></label>
-        <input asp-for="Description" class="form-control" />
+        <textarea asp-for="Description" class="form-control"></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
+
+    @*
+        If user decides to create a ticket within project, Project Options is not supplied with data.
+        This makes projects options null. Project Id is passed in the view model.
+
+        If user devices to create a ticket within Tickets index, Project Options is supplied with data.
+        This makes project options not null. Select Item value has Project.Id. Whatever is selected, ProjectId 
+        is passed with the form.
+    *@
+    @if (Model.ProjectOptions == null)
+    {
+        <input type="hidden" asp-for="ProjectId" />
+    }
+    else
+    {
+        <div class="form-group">
+            <label asp-for="ProjectId">Project</label>
+            <select asp-for="ProjectId" asp-items="Model.ProjectOptions" class="form-select"></select>
+            <span asp-validation-for="ProjectId" class="text-danger"></span>
+        </div>
+    }
+
     <div class="form-group">
-        <label asp-for="Status" class="form-label"></label> 
+        <label asp-for="Status" class="form-label"></label>
         <select asp-for="Status" class="form-select" asp-items="Model.StatusOptions"></select>
         <span asp-validation-for="Status" class="text-danger"></span>
     </div>
