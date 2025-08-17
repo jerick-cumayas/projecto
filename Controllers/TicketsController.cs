@@ -144,6 +144,7 @@ namespace Projecto.Controllers
       return RedirectToAction("Details", "Projects", new { id = ticket.ProjectId });
     }
 
+    [HttpGet]
     public async Task<IActionResult> Delete(int id)
     {
       var ticket = await _ticketService.GetById(id);
@@ -157,8 +158,9 @@ namespace Projecto.Controllers
     {
       var ticket = await _ticketService.GetById(id);
       if (ticket == null) return NotFound();
+      int projectId = ticket.ProjectId;
       await _ticketService.Delete(ticket);
-      return RedirectToAction("Index");
+      return RedirectToAction("Details", "Projects", new { id = projectId});
     }
 
     private async Task<TicketFormModel> BuildTicketFormModel(int? projectId = null)
