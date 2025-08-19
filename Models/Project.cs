@@ -5,7 +5,7 @@
         public int Id { get; set; }
         public required string Name { get; set; }
         public required string Description { get; set; }
-        public ICollection<Ticket> Tickets { get; set; } = [];
+        public ICollection<Sprint> Sprints { get; set; } = [];
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime LastUpdatedAt { get; set; } = DateTime.Now;
     }

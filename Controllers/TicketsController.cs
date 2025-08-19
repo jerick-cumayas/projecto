@@ -44,7 +44,7 @@ namespace Projecto.Controllers
                 Value = p.Id.ToString(),
                 Text = p.Name
               }),
-        StatusOptions = EnumHelper.GetEnumSelectList<Models.TaskStatus>(),
+        StatusOptions = EnumHelper.GetEnumSelectList<TicketStatus>(),
         PriorityOptions = EnumHelper.GetEnumSelectList<Priority>(),
       };
 
@@ -96,7 +96,7 @@ namespace Projecto.Controllers
         Priority = ticket.Priority,
         CreatedAt = ticket.CreatedAt,
         DueDate = ticket.DueDate,
-        StatusOptions = EnumHelper.GetEnumSelectList<Models.TaskStatus>(),
+        StatusOptions = EnumHelper.GetEnumSelectList<TicketStatus>(),
         PriorityOptions = EnumHelper.GetEnumSelectList<Priority>()
       };
       return View(vm);
@@ -121,7 +121,7 @@ namespace Projecto.Controllers
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpdateStatus(int id, Models.TaskStatus status)
+    public async Task<IActionResult> UpdateStatus(int id, TicketStatus status)
     {
       var ticket = await _ticketService.GetById(id);
       if (ticket == null) return NotFound();
@@ -169,7 +169,7 @@ namespace Projecto.Controllers
       {
         ProjectId = projectId ?? 0,
         DueDate = DateTime.Today.AddDays(7),
-        StatusOptions = EnumHelper.GetEnumSelectList<Models.TaskStatus>(),
+        StatusOptions = EnumHelper.GetEnumSelectList<TicketStatus>(),
         PriorityOptions = EnumHelper.GetEnumSelectList<Priority>()
       };
 

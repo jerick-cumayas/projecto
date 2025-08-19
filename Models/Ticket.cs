@@ -7,20 +7,20 @@ namespace Projecto.Models
   {
     [Key]
     public int Id { get; set; }
-    public required int ProjectId { get; set; }
+    public required int SprintId { get; set; }
 
-    [ForeignKey("ProjectId")]
-    public Project? Project { get; set; }
+    [ForeignKey("SprintId")]
+    public Sprint? Sprint { get; set; }
     public required string Title { get; set; }
     public required string Description { get; set; }
-    public required TaskStatus Status { get; set; } = TaskStatus.ToDo;
+    public required TicketStatus Status { get; set; } = TicketStatus.ToDo;
     public required Priority Priority { get; set; } = Priority.Medium;
     public required DateTime DueDate { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime LastUpdatedAt { get; set; } = DateTime.Now;
   }
 
-  public enum TaskStatus {
+  public enum TicketStatus {
     ToDo,
     InProgress,
     Done

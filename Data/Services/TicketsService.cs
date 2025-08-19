@@ -13,19 +13,13 @@ namespace Projecto.Data.Service
 
     public async Task<IEnumerable<Ticket>> GetAll()
     {
-      return await _context.Tickets.Include(t => t.Project).ToListAsync();
+      return await _context.Tickets.Include(ticket => ticket.Sprint).ToListAsync();
     }
 
     public async Task<Ticket?> GetById(int id)
     {
       var ticket = await _context.Tickets.FirstOrDefaultAsync(p => p.Id == id);
       return ticket;
-    }
-    public async Task<IEnumerable<Ticket>> GetTicketsByProjectId(int projectId)
-    {
-      return await _context.Tickets
-          .Where(t => t.ProjectId == projectId)
-          .ToListAsync();
     }
     public async Task Add(Ticket ticket)
     {

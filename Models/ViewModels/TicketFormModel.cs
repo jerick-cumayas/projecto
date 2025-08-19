@@ -16,7 +16,7 @@ namespace Projecto.Models.ViewModels
     public string Description { get; set; } = "";
 
     [Required(ErrorMessage = "Status is required")]
-    public TaskStatus Status { get; set; }
+    public TicketStatus Status { get; set; }
 
     [Required(ErrorMessage = "Priority is required")]
     public Priority Priority { get; set; }
