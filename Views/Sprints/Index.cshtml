@@ -1,0 +1,39 @@
+@model IEnumerable<Projecto.Models.Sprint>
+  
+@if (!Model.Any())
+{
+  <p>No sprints in project.</p>
+}
+else
+{
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <td>Title</td>
+        <td>Description</td>
+        <td>CreatedAt</td>
+        <td>Due Date</td>
+        <td>Actions</td>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var sprint in Model)
+      {
+        <tr>
+          <td>@sprint.Title</td>
+          <td>@sprint.Description</td>
+          <td>@sprint.CreatedAt</td>
+          <td>@sprint.DueDate</td>
+          <td>
+            <a asp-controller="Tickets" asp-action="Details" asp-route-id="@sprint.Id" class="btn btn-info"><i
+                class="bi bi-eye"></i></a>
+            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@sprint.Id" class="btn btn-secondary"><i
+                class="bi bi-pencil"></i></a>
+            <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@sprint.Id" class="btn btn-secondary"><i
+                class="bi bi-trash"></i></a>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

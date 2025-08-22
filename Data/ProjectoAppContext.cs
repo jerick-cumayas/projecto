@@ -7,6 +7,7 @@ namespace Projecto.Data
     {
         public ProjectoAppContext(DbContextOptions<ProjectoAppContext> options) : base(options) { }
         public DbSet<Project> Projects { get; set; }
+        public DbSet<Sprint> Sprints { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
     }
 }

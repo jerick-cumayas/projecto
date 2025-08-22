@@ -8,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ProjectoAppContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
-builder.Services.AddScoped<IProjectService, ProjectsService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<ISprintService, SprintService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 var app = builder.Build();
 
