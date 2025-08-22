@@ -30,9 +30,9 @@ Statistics
   - [ ] Show number of all Done tickets from every project
 
 Sprints
-- [ ] Create a sprint inside a project - `feature/15-create-sprint-project`
+- [x] Create a sprint inside a project - `feature/15-create-sprint-project`
 - [ ] Assign ticket to a sprint - `feature/16-assign-ticket-sprint`
 - [ ] Multi select a ticket to a sprint - `feature/17-multi-select-ticket-sprint`
 - [ ] View sprint details - `feature/18-view-sprint-details`
 - [ ] Update sprint details - `feature/19-update-sprint`
-- [ ] Delete not completed sprint - `feature/20-delete-sprint`
+- [ ] Delete not completed sprint - `feature/15-create-sprint-project`
