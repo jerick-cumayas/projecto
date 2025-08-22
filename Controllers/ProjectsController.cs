@@ -1,31 +1,21 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Projecto.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using Projecto.Data.Service;
 using Projecto.Models;
-using Projecto.Models.ViewModels;
 
 namespace Projecto.Controllers
 {
     public class ProjectsController : Controller
     {
         private readonly IProjectService _projectService;
-        private readonly ITicketService _ticketSerivce;
-        public ProjectsController(IProjectService projectService, ITicketService ticketService)
+        public ProjectsController(IProjectService projectService)
         {
             _projectService = projectService;
-            _ticketSerivce = ticketService;
         }
         public async Task<IActionResult> Index()
         {
             var projects = await _projectService.GetAll();
             return View(projects);
         }
-        // public async Task<IActionResult> Details(int id)
-        // {
-        //     var project = await _projectService.GetById(id);
-        //     return View(project);
-        // }
         public async Task<IActionResult> Details(int id)
         {
             var project = await _projectService.GetById(id);
@@ -33,18 +23,7 @@ namespace Projecto.Controllers
             if (project == null)
                 return NotFound();
 
-            var tickets = await _ticketSerivce.GetTicketsByProjectId(id);
-
-            var vm = new ProjectDetailsViewModel
-            {
-                Project = project,
-                Tickets = tickets,
-                StatusOptions = EnumHelper.GetEnumSelectList<Models.TaskStatus>(),
-                PriorityOptions = EnumHelper.GetEnumSelectList<Priority>(),
-                OpenTicketsCount = tickets.Count(t => t.Status == Models.TaskStatus.ToDo)
-            };
-
-            return View(vm);
+            return View(project);
         }
         public IActionResult Create()
         {
