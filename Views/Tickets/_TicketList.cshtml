@@ -1,0 +1,44 @@
+@model IEnumerable<Projecto.Models.Ticket>
+
+@if (!Model.Any())
+{
+  <p>No tickets in project.</p>
+}
+else
+{
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Priority</th>
+        <th>Status</th>
+        <th>Created At</th>
+        <th>Due Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var ticket in Model)
+      {
+        <tr>
+          <td>@ticket.Title</td>
+          <td>@ticket.Priority</td>
+          <td>@ticket.Status</td>
+          <td>@ticket.CreatedAt</td>
+          <td>@ticket.DueDate</td>
+          <td>
+            <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-info">
+              <i class="bi bi-eye"></i>
+            </a>
+            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="btn btn-secondary">
+              <i class="bi bi-pencil"></i>
+            </a>
+            <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id" class="btn btn-danger">
+              <i class="bi bi-trash"></i>
+            </a>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

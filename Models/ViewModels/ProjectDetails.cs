@@ -1,9 +1,8 @@
-using Microsoft.AspNetCore.Mvc.Rendering;
-
 namespace Projecto.Models.ViewModels
 {
-    public class ProjectDetailsViewModel
+    public class ProjectDetails
     {
         public required Project Project { get; set; }
+        public required IEnumerable<Ticket> Tickets { get; set; }
     }
 }

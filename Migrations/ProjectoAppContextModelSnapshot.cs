@@ -46,7 +46,7 @@ namespace Projecto.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Projects", (string)null);
                 });
 
             modelBuilder.Entity("Projecto.Models.Sprint", b =>
@@ -84,7 +84,7 @@ namespace Projecto.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("Sprints");
+                    b.ToTable("Sprints", (string)null);
                 });
 
             modelBuilder.Entity("Projecto.Models.Ticket", b =>
@@ -130,7 +130,7 @@ namespace Projecto.Migrations
 
                     b.HasIndex("SprintId");
 
-                    b.ToTable("Tickets");
+                    b.ToTable("Tickets", (string)null);
                 });
 
             modelBuilder.Entity("Projecto.Models.Sprint", b =>

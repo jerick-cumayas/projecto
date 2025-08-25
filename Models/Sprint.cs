@@ -7,7 +7,7 @@ namespace Projecto.Models
     public int Id { get; set; }
     public int ProjectId { get; set; }
     [ForeignKey("ProjectId")]
-    public Project? Project;
+    public Project? Project { get; set; }
     public string Title { get; set; } = "";
     public string Description { get; set; } = "";
     public SprintStatus Status { get; set; } = SprintStatus.Planned;
