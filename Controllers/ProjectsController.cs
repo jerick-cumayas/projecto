@@ -1,15 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Projecto.Data.Service;
 using Projecto.Models;
+using Projecto.Models.ViewModels;
 
 namespace Projecto.Controllers
 {
     public class ProjectsController : Controller
     {
         private readonly IProjectService _projectService;
-        public ProjectsController(IProjectService projectService)
+        private readonly ITicketService _ticketService;
+        public ProjectsController(IProjectService projectService, ITicketService ticketService)
         {
             _projectService = projectService;
+            _ticketService = ticketService;
         }
         public async Task<IActionResult> Index()
         {
@@ -23,7 +26,15 @@ namespace Projecto.Controllers
             if (project == null)
                 return NotFound();
 
-            return View(project);
+            var tickets = await _ticketService.GetAllByProjectId(id);
+
+            var vm = new ProjectDetails
+            {
+                Project = project,
+                Tickets = tickets
+            };
+
+            return View(vm);
         }
         public IActionResult Create()
         {

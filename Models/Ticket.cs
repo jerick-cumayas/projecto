@@ -7,10 +7,9 @@ namespace Projecto.Models
   {
     [Key]
     public int Id { get; set; }
-
     public required int ProjectId { get; set; }
     [ForeignKey("ProjectId")]
-    public required Project Project { get; set; }
+    public Project? Project { get; set; }
     public int? SprintId { get; set; }
     [ForeignKey("SprintId")]
     public Sprint? Sprint { get; set; }

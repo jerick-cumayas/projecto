@@ -1,4 +1,4 @@
-@model Projecto.Models.ViewModels.TicketFormModel
+@model Projecto.Models.ViewModels.TicketForm
 
 @{
   ViewData["Title"] = "Edit Ticket";
@@ -6,4 +6,4 @@
   ViewData["SubmitText"] = "Save Changes";
 }
 
-@* @await Html.PartialAsync("_TicketForm", Model) *@
+@await Html.PartialAsync("_TicketForm", Model)

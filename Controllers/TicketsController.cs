@@ -10,16 +10,30 @@ namespace Projecto.Controllers
   {
     private readonly ITicketService _ticketService;
     private readonly IProjectService _projectService;
-    public TicketsController(ITicketService ticketService, IProjectService projectService)
+    private readonly ISprintService _sprintService;
+    public TicketsController(ITicketService ticketService, IProjectService projectService, ISprintService sprintService)
     {
       _ticketService = ticketService;
       _projectService = projectService;
+      _sprintService = sprintService;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? projectId)
     {
+      if (projectId.HasValue)
+      {
+        var projectTickets = await _ticketService.GetAllByProjectId(projectId.Value);
+        return View(projectTickets);
+      }
       var tickets = await _ticketService.GetAll();
       return View(tickets);
+    }
+
+    public async Task<IActionResult> ListByProject(int projectId)
+    {
+      var tickets = await _ticketService.GetAllByProjectId(projectId);
+
+      return PartialView("_TicketList", tickets);
     }
 
     //   public async Task<IActionResult> Details(int id)
@@ -28,57 +42,57 @@ namespace Projecto.Controllers
     //     return View(ticket);
     //   }
 
-    //   [HttpGet]
-    //   public async Task<IActionResult> Create(int? projectId)
-    //   {
-    //     var projectOptions = await _projectService.GetAll();
+    [HttpGet]
+    public async Task<IActionResult> Create(int? projectId)
+    {
+      var projectOptions = await _projectService.GetAll();
 
-    //     var model = new TicketFormModel
-    //     {
-    //       ProjectId = projectId ?? 0,
-    //       DueDate = DateTime.Today.AddDays(7),
-    //       ProjectOptions = projectId.HasValue
-    //             ? null
-    //             : projectOptions.Select(p => new SelectListItem
-    //             {
-    //               Value = p.Id.ToString(),
-    //               Text = p.Name
-    //             }),
-    //       StatusOptions = EnumHelper.GetEnumSelectList<Models.TaskStatus>(),
-    //       PriorityOptions = EnumHelper.GetEnumSelectList<Priority>(),
-    //     };
+      var model = new TicketForm
+      {
+        ProjectId = projectId ?? 0,
+        DueDate = DateTime.Today.AddDays(7),
+        ProjectOptions = projectId.HasValue
+              ? null
+              : projectOptions.Select(p => new SelectListItem
+              {
+                Value = p.Id.ToString(),
+                Text = p.Title
+              }),
+        StatusOptions = EnumHelper.GetEnumSelectList<TicketStatus>(),
+        PriorityOptions = EnumHelper.GetEnumSelectList<Priority>(),
+      };
 
-    //     return View(model);
-    //   }
+      return View(model);
+    }
 
-    //   [HttpPost]
-    //   [ValidateAntiForgeryToken]
-    //   public async Task<IActionResult> Create(TicketFormModel form)
-    //   {
-    //     // if (!ModelState.IsValid)
-    //     // {
-    //     //   var vm = await BuildTicketFormModel(form.ProjectId);
-    //     //   vm.Title = form.Title;
-    //     //   vm.Description = form.Description;
-    //     //   vm.Status = form.Status;
-    //     //   vm.Priority = form.Priority;
-    //     //   vm.DueDate = form.DueDate;
-    //     //   return View("Create", vm);
-    //     // }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(TicketForm form)
+    {
+      if (!ModelState.IsValid)
+      {
+        var vm = await BuildTicketFormModel(form.ProjectId);
+        vm.Title = form.Title;
+        vm.Description = form.Description;
+        vm.Status = form.Status;
+        vm.Priority = form.Priority;
+        vm.DueDate = form.DueDate;
+        return View("Create", vm);
+      }
 
-    //     // var ticket = new Ticket
-    //     // {
-    //     //   ProjectId = form.ProjectId,
-    //     //   Title = form.Title,
-    //     //   Description = form.Description,
-    //     //   Status = form.Status,
-    //     //   Priority = form.Priority,
-    //     //   DueDate = form.DueDate,
-    //     // };
+      var ticket = new Ticket
+      {
+        ProjectId = form.ProjectId,
+        Title = form.Title,
+        Description = form.Description,
+        Status = form.Status,
+        Priority = form.Priority,
+        DueDate = form.DueDate,
+      };
 
-    //     // await _ticketService.Add(ticket);
-    //     return RedirectToAction("Details", "Projects", new { id = form.ProjectId });
-    //   }
+      await _ticketService.Add(ticket);
+      return RedirectToAction("Details", "Projects", new { id = form.ProjectId });
+    }
 
     //   [HttpGet]
     //   public async Task<IActionResult> Edit(int id)
@@ -163,28 +177,27 @@ namespace Projecto.Controllers
       return RedirectToAction("Details", "Projects", new { id = projectId });
     }
 
-    //   private async Task<TicketFormModel> BuildTicketFormModel(int? projectId = null)
-    //   {
-    //     var model = new TicketFormModel
-    //     {
-    //       ProjectId = projectId ?? 0,
-    //       DueDate = DateTime.Today.AddDays(7),
-    //       StatusOptions = EnumHelper.GetEnumSelectList<Models.TaskStatus>(),
-    //       PriorityOptions = EnumHelper.GetEnumSelectList<Priority>()
-    //     };
+    private async Task<TicketForm> BuildTicketFormModel(int? projectId = null)
+    {
+      var model = new TicketForm
+      {
+        ProjectId = projectId ?? 0,
+        DueDate = DateTime.Today.AddDays(7),
+        StatusOptions = EnumHelper.GetEnumSelectList<TicketStatus>(),
+        PriorityOptions = EnumHelper.GetEnumSelectList<Priority>()
+      };
 
-    //     if (!projectId.HasValue)
-    //     {
-    //       var projectOptions = await _projectService.GetAll();
-    //       model.ProjectOptions = projectOptions.Select(p => new SelectListItem
-    //       {
-    //         Value = p.Id.ToString(),
-    //         Text = p.Name
-    //       });
-    //     }
+      if (!projectId.HasValue)
+      {
+        var projectOptions = await _projectService.GetAll();
+        model.ProjectOptions = projectOptions.Select(p => new SelectListItem
+        {
+          Value = p.Id.ToString(),
+          Text = p.Title
+        });
+      }
 
-    //     return model;
-    //   }
-    // }
+      return model;
+    }
   }
 }
