@@ -1,0 +1,59 @@
+@model Projecto.Models.ViewModels.TicketList
+
+@if (!Model.Tickets.Any())
+{
+  <p>No tickets in project.</p>
+}
+else
+{
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Priority</th>
+        <th>Created At</th>
+        <th>Due Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var ticket in Model.Tickets)
+      {
+        <tr>
+          <td>@ticket.Title</td>
+          <td>
+            <form asp-controller="Tickets" asp-action="UpdateStatus" method="POST" class="ticket-form">
+              <input type="hidden" name="Id" value="@ticket.Id">
+              <select name="Status" asp-for="@ticket.Status" class="ticket-status form-select" data-ticket-id="@ticket.Id"
+                asp-items="Model.StatusOptions">
+              </select>
+            </form>
+          </td>
+          <td>
+            <select class="ticket-priority form-select" data-ticket-id="@ticket.Id" asp-items="Model.PriorityOptions"
+              value="@ticket.Priority">
+            </select>
+          </td>
+          <td>@ticket.CreatedAt</td>
+          <td>@ticket.DueDate</td>
+          <td>
+            <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-info">
+              <i class="bi bi-eye"></i>
+            </a>
+            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id" class="btn btn-secondary">
+              <i class="bi bi-pencil"></i>
+            </a>
+            <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id" class="btn btn-danger">
+              <i class="bi bi-trash"></i>
+            </a>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
+
+@section Scripts {
+  <script src="~/js/tickets.js"></script>
+}

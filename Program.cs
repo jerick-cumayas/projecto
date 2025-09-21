@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Projecto.Data;
 using Projecto.Data.Service;
@@ -11,6 +12,13 @@ builder.Services.AddDbContext<ProjectoAppContext>(options => options.UseSqlServe
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<ISprintService, SprintService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddApiVersioning(options =>
+{
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.ReportApiVersions = true;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

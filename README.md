@@ -13,7 +13,7 @@ Projects
 Tickets
 - [x] Create a ticket in a Project - `feature/06-create-ticket-project`
 - [x] Create a ticket assign to a Project - `feature/07-create-ticket-assign-project`
-- [ ] View ticket details - `feature/08-view-ticket-details`
+- [x] View ticket details - `feature/08-view-ticket-details`
 - [ ] Update ticket Status - `feature/09-update-ticket-status`
 - [ ] Update ticket Priority - `feature/10-update-ticket-priority`
 - [x] Delete a ticket - `feature/11-delete-ticket`
