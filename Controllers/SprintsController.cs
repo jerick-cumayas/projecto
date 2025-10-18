@@ -8,10 +8,12 @@ namespace Projecto.Controllers
   public class SprintsController : Controller
   {
     private readonly ISprintService _sprintService;
+    private readonly ITicketService _ticketService;
 
-    public SprintsController(ISprintService sprintService)
+    public SprintsController(ISprintService sprintService, ITicketService ticketService)
     {
       _sprintService = sprintService;
+      _ticketService = ticketService;
     }
 
     public async Task<IActionResult> Index()
@@ -28,11 +30,12 @@ namespace Projecto.Controllers
     public async Task<IActionResult> Details(int id)
     {
       var sprint = await _sprintService.GetById(id);
+      var tickets = await _ticketService.GetAllBySprintId(sprint!.Id);
       if (sprint == null) return NotFound();
       var vm = new SprintDetails
       {
         Sprint = sprint,
-        Tickets = sprint.Tickets
+        Tickets = tickets
       };
       return View(vm);
     }

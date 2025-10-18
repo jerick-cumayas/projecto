@@ -4,10 +4,6 @@
   ViewData["Title"] = "Tickets Page";
 }
 
-<div class="container d-flex justify-content-end align-items-center mb-3">
-  <a asp-controller="Tickets" asp-action="Create" class="btn btn-primary">+ Add Ticket</a>
-</div>
-
 @if (!Model.Any())
 {
   <p>No tickets in project.</p>
@@ -19,7 +15,7 @@ else
     <thead class="table-light">
       <tr>
         <th>Title</th>
-        @* <th>Project</th> *@
+        <th>Project</th>
         <th>Priority</th>
         <th>Status</th>
         <th>CreatedAt</th>
@@ -32,11 +28,9 @@ else
       {
         <tr>
           <td>@ticket.Title</td>
-          @* <td>@ticket.Project!.Name</td> *@
-          @* <td>@ticket.Priority</td> *@
-          @* <td>@ticket.Status</td> *@
-          <td>
-          </td>
+          <td>@ticket.Project!.Title</td>
+          <td>@ticket.Priority</td>
+          <td>@ticket.Status</td>
           <td>@ticket.CreatedAt</td>
           <td>@ticket.DueDate</td>
           <td>

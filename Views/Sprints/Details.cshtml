@@ -29,6 +29,9 @@
     </div>
 </div>
 
-<div class="container pt-4">
+<div class="pt-4">
+    <div class="container d-flex justify-content-end align-items-center mb-3">
+        <a asp-controller="Tickets" asp-action="CreateInSprint" asp-route-sprintId=@Model.Sprint.Id" class="btn btn-primary">+ Add Ticket</a>
+    </div>
     @await Html.PartialAsync("~/Views/Tickets/Index.cshtml", Model.Tickets)
 </div>
