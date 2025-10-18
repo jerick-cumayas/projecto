@@ -16,7 +16,7 @@ namespace Projecto.Data.Service
     public async Task<Sprint?> GetById(int id)
     {
       return await _context.Sprints
-       .Include(s => s.Project).Include(s => s.Tickets)
+       .Include(s => s.Project)
        .FirstOrDefaultAsync(s => s.Id == id);
     }
     public async Task Add(Sprint sprint)

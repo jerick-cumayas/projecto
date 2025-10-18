@@ -8,6 +8,7 @@ namespace Projecto.Models.ViewModels
     public int? Id { get; set; }
     [Required]
     public int ProjectId { get; set; }
+    public int? SprintId { get; set; }
 
     [Required(ErrorMessage = "Title is required")]
     public string Title { get; set; } = "";

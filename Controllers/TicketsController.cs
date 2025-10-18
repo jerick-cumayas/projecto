@@ -36,6 +36,13 @@ namespace Projecto.Controllers
       return PartialView("_TicketList", tickets);
     }
 
+    public async Task<IActionResult> ListBySprint(int sprintId)
+    {
+      var tickets = await _ticketService.GetAllBySprintId(sprintId);
+
+      return PartialView("_SprintTickets.cshtml", tickets);
+    }
+
     //   public async Task<IActionResult> Details(int id)
     //   {
     //     var ticket = await _ticketService.GetById(id);
@@ -65,6 +72,22 @@ namespace Projecto.Controllers
       return View(model);
     }
 
+    [HttpGet]
+    public async Task<IActionResult> CreateInSprint(int sprintId)
+    {
+      var sprint = await _sprintService.GetById(sprintId);
+      var model = new TicketForm
+      {
+        ProjectId = sprint!.ProjectId,
+        SprintId = sprintId,
+        DueDate = DateTime.Today.AddDays(7),
+        StatusOptions = EnumHelper.GetEnumSelectList<TicketStatus>(),
+        PriorityOptions = EnumHelper.GetEnumSelectList<Priority>()
+      };
+
+      return View(model);
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(TicketForm form)
@@ -83,6 +106,7 @@ namespace Projecto.Controllers
       var ticket = new Ticket
       {
         ProjectId = form.ProjectId,
+        SprintId = form.SprintId,
         Title = form.Title,
         Description = form.Description,
         Status = form.Status,

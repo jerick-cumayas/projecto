@@ -31,6 +31,7 @@ Statistics
 
 Sprints
 - [x] Create a sprint inside a project - `feature/15-create-sprint-project`
+- [x] Create a ticket in sprint - `feature/20-create-ticket-sprint`
 - [ ] Assign ticket to a sprint - `feature/16-assign-ticket-sprint`
 - [ ] Multi select a ticket to a sprint - `feature/17-multi-select-ticket-sprint`
 - [ ] View sprint details - `feature/18-view-sprint-details`
